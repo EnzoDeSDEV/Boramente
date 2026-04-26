@@ -1,4 +1,4 @@
-import { router } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import { useState } from "react";
 import { Pressable, StyleSheet, Text, TextInput, View } from "react-native";
 
@@ -12,6 +12,11 @@ export default function ModalScreen() {
     setPlayer((player) => [...player, cleaned]);
     setName("");
   };
+
+  const { category, difficulty } = useLocalSearchParams<{
+    category?: string;
+    difficulty?: string;
+  }>();
 
   const deletePlayer = (indexToRemove: number) => {
     setPlayer((player) => player.filter((_, index) => index !== indexToRemove));
@@ -43,6 +48,10 @@ export default function ModalScreen() {
         </Pressable>
       </View>
 
+      <Text style={styles.helperText}>
+        Ajoute les joueurs puis lance les questions.
+      </Text>
+
       <View style={styles.list}>
         {player.length === 0 ? (
           <Text style={styles.emptyText}>Aucun joueur pour le moment.</Text>
@@ -64,7 +73,10 @@ export default function ModalScreen() {
           onPress={() =>
             router.push({
               pathname: "/Question",
-              params: { player: JSON.stringify(player) },
+              params: { 
+                category,
+                difficulty,
+                player: JSON.stringify(player) },
             })
           }
           disabled={player.length === 0}
@@ -195,4 +207,13 @@ const styles = StyleSheet.create({
   buttonDisabled: {
     opacity: 0.45,
   },
+    helperText: {
+    color: "#93c5fd",
+    width: "100%",
+    maxWidth: 380,
+    alignSelf: "center",
+    marginTop: 14,
+    fontSize: 13,
+    textAlign: "center",
+    }
 });

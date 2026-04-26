@@ -10,17 +10,25 @@ export default function HomeScreen() {
       <View style={styles.heroCard}>
         <Text style={styles.kicker}>Culture G</Text>
         <Text style={styles.title}>Boramente</Text>
-        <Text style={styles.subtitle}>Teste ta culture generale en groupe.</Text>
+        <Text style={styles.subtitle}>
+          Teste ta culture generale en groupe.
+        </Text>
       </View>
 
       <Pressable
-        onPress={() => router.push("/AddPlayer")}
-        style={({ pressed }) => [styles.startButton, pressed && styles.buttonPressed]}
+        onPress={() => router.push("/SelectMode")}
+        style={({ pressed }) => [
+          styles.startButton,
+          pressed && styles.buttonPressed,
+        ]}
       >
-        <Text style={styles.startButtonText}>Commencer une partie</Text>
+        <Text style={styles.startButtonText}>
+          Sélection ton mode
+        </Text>
       </Pressable>
-
-      <Text style={styles.helperText}>Ajoute les joueurs puis lance les questions.</Text>
+      <Text style={styles.helperText}>
+        Ajoute les joueurs puis lance les questions.
+      </Text>
     </View>
   );
 }

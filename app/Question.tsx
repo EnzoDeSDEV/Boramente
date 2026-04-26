@@ -8,9 +8,18 @@ type QuizQuestion = {
 };
 
 export default function Questions() {
-  const { player } = useLocalSearchParams<{ player?: string }>();
+  const { player,category,difficulty } = useLocalSearchParams<{ 
+    player?: string 
+    category?: string
+    difficulty?: string
+  }>();
+
   const playerList: string[] =
     typeof player === "string" ? JSON.parse(player) : [];
+
+  const capitalizeFirstLetter = (Text:string) => {
+    return Text.charAt(0).toUpperCase() + Text.slice(1)
+  }
 
   const randomizedPlayers = useMemo(() => {
     return [...playerList]
@@ -36,8 +45,12 @@ export default function Questions() {
   useEffect(() => {
     const LoadQuestion = async () => {
       try {
+        const queryParams = new URLSearchParams();
+        if (category) queryParams.set("category", category);
+        if (difficulty) queryParams.set("difficulty", difficulty);
+
         const response = await fetch(
-          "https://quizzapi.jomoreschi.fr/api/v2/quiz",
+          `https://quizzapi.jomoreschi.fr/api/v2/quiz?${queryParams.toString()}`,
         );
         const data = await response.json();
         setQuestions(data.quizzes ?? []);
@@ -48,13 +61,16 @@ export default function Questions() {
       }
     };
     LoadQuestion();
-  }, []);
+  }, [category, difficulty]);
 
   return (
     <View style={styles.container}>
       <View style={styles.bgOrbTop} />
       <View style={styles.bgOrbBottom} />
 
+      <Text style={styles.pageTitle}>
+        {category ? capitalizeFirstLetter(category) : 'Classique'}
+      </Text>
       <Text style={styles.pageTitle}>Question du tour</Text>
 
       <View style={styles.containerQuestion}>
